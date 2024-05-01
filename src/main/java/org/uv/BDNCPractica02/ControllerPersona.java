@@ -49,9 +49,17 @@ public class ControllerPersona {
         return personaSaved;  // Devuelve el empleado recién creado
     }
     
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable String id) {
-        return null;
+    @DeleteMapping("/persona/{id}")
+    public Persona deletePersona(@PathVariable String id) {
+        Optional<Persona> personaExistente = repositoryPersona.findById(id);
+
+        if (personaExistente.isPresent()) {
+            Persona repPersona = personaExistente.get();
+            repositoryPersona.deleteById(id);  // Eliminar el documento
+            return repPersona;  // Devolver el objeto eliminado
+        } else {
+            // Devolver null si el documento no se encuentra
+            return null;
+        }
     }
-    
 }
