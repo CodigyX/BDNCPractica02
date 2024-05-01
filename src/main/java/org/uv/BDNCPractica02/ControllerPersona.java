@@ -37,16 +37,31 @@ public class ControllerPersona {
         return null;   //Sino existe retorna nulo
     }
     
-    @PutMapping("/{id}")
-    public ResponseEntity<?> put(@PathVariable String id, @RequestBody Object input) {
-        return null;
+    @PutMapping("/persona/{id}")
+    public ResponseEntity<?> updatePersona(@PathVariable String id, @RequestBody Persona personaActualizada) {
+        Optional<Persona> personaExistente = repositoryPersona.findById(id);
+
+        if (personaExistente.isPresent()) {
+            Persona repPersona = personaExistente.get();
+
+            // Actualizar campos con datos del collection
+            repPersona.setNombre(personaActualizada.getNombre());
+            repPersona.setDireccion(personaActualizada.getDireccion());
+            repPersona.setTelefono(personaActualizada.getTelefono());
+
+            // Guardar cambios y devolver el collection actualizado
+            return ResponseEntity.ok(repositoryPersona.save(repPersona));  
+        } else {
+            // Devolver un mensaje que  no encuentra el ID
+            return ResponseEntity.status(404).body("Persona con ID" + id +" no encontrada.");
+        }
     }
     
     @PostMapping
     public Persona post(@RequestBody Persona addPersona) {
         // Guarda y escribe el empleado inmediatamente en la base de datos
         Persona personaSaved = repositoryPersona.insert(addPersona);  
-        return personaSaved;  // Devuelve el empleado recién creado
+        return personaSaved;  // Devuelve la persona recién creada
     }
     
     @DeleteMapping("/persona/{id}")
