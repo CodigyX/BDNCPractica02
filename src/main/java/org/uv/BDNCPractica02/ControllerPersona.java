@@ -3,6 +3,7 @@ package org.uv.BDNCPractica02;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,9 +28,13 @@ public class ControllerPersona {
         return repositoryPersona.findAll();
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("persona/{id}")
     public Object get(@PathVariable String id) {
-        return null;
+        Optional<Persona> repPersona=repositoryPersona.findById(id);
+    if (repPersona.isPresent())
+        return repPersona.get();
+    else
+        return null;   
     }
     
     @PutMapping("/{id}")
