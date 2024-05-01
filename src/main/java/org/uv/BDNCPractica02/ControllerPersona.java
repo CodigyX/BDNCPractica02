@@ -25,16 +25,16 @@ public class ControllerPersona {
     
     @GetMapping("/persona/")
     public List<Persona> list() {
-        return repositoryPersona.findAll();
+        return repositoryPersona.findAll(); //Muestra todas las personas del collection
     }
     
     @GetMapping("persona/{id}")
     public Object get(@PathVariable String id) {
         Optional<Persona> repPersona=repositoryPersona.findById(id);
-    if (repPersona.isPresent())
-        return repPersona.get();
+    if (repPersona.isPresent())//Condiciona si la persona existe
+        return repPersona.get();//Regresa los datos de la persona
     else
-        return null;   
+        return null;   //Sino existe retorna nulo
     }
     
     @PutMapping("/{id}")
@@ -43,8 +43,10 @@ public class ControllerPersona {
     }
     
     @PostMapping
-    public ResponseEntity<?> post(@RequestBody Object input) {
-        return null;
+    public Persona post(@RequestBody Persona addPersona) {
+        // Guarda y escribe el empleado inmediatamente en la base de datos
+        Persona personaSaved = repositoryPersona.insert(addPersona);  
+        return personaSaved;  // Devuelve el empleado recién creado
     }
     
     @DeleteMapping("/{id}")
